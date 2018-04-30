@@ -1,0 +1,21 @@
+public class BaseController {
+public void method() {
+validate(); // I don't want to run this!
+}
+}
+public class JDrivenController extends BaseController {
+public void method(){
+super.method()
+load(); // I only want to test this!
+}
+}
+@Test
+public void testSave() {
+JDrivenController spy = Mockito.spy(new JDrivenController ());
+// Prevent/stub logic in super.method()
+Mockito.doNothing().when((BaseController)spy).validate();
+// When
+spy.method();
+// Then
+verify(spy).load();
+}
